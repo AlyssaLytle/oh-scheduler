@@ -30,11 +30,22 @@ def get_availability(fname: str) -> dict:
             avail_dict[name.lower()] = {}
         for row in reader:
             time_slot = row[0]
-            score = row[2]
+            score = row[1]
             time_slot_scores[time_slot] = int(score)
             availabilites = row[3:]
             # for each shift, populate each team member's availability in their dict
             for idx in range(len(availabilites)):
                 avail_dict[names[idx].lower()][time_slot] = availabilites[idx] 
     return [time_slot_scores, avail_dict]
-    
+
+def get_shift_data(fname: str) -> dict[str, int]:
+    """Gets amount of slots per each shift."""
+    shifts = {}
+    with open(fname) as csvfile:
+        reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+        for row in reader:
+            time = row[0]
+            slots = int(row[1])
+            shifts[time] = slots 
+    return shifts
+
